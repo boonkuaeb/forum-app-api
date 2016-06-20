@@ -20,7 +20,12 @@ class TopicController extends Controller
 
     public function show(Topic $topic)
     {
-        dd('show');
+        return fractal()
+            ->item($topic)
+            ->includeUser()
+            #    ->includeSection()
+            ->transformWith(new TopicTransformer())
+            ->toArray();
     }
 
     public function store(CreateTopicFormRequest $request)
