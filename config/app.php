@@ -159,7 +159,9 @@ return [
         /*
          * Package service profider
          */
-        Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class
+        Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
+        Spatie\Fractal\FractalServiceProvider::class,
+
 
 
     ],
@@ -212,7 +214,8 @@ return [
         /**
          * Package Service Provider
          */
-        'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class
+        'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
+
 
     ],
 
