@@ -22,7 +22,6 @@ Route::group(['middleware' => ['api']], function () {
         'uses' => 'Forum\TopicController@show'
     ]);
 
-
     Route::group(['middleware' => 'jwt.auth'], function () {
         Route::get('/test', function () {
             dd('You are authenticated.');
