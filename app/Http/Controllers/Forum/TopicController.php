@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Forum;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
+use App\Http\Requests\Forum\CreateTopicFormRequest;
 use App\Models\Section;
 use App\Models\Topic;
+use App\Transformers\TopicTransformer;
 use Illuminate\Http\Request;
-use App\Http\Requests\Forum\CreateTopicFormRequest;
 
 
 class TopicController extends Controller
@@ -24,11 +25,18 @@ class TopicController extends Controller
 
     public function store(CreateTopicFormRequest $request)
     {
-        $request->user()->topics()->create([
-            'title'=>$request->json('title'),
-            'section_id'=>$request->json('section_id'),
+        $topic = $request->user()->topics()->create([
+            'title' => $request->json('title'),
+            'section_id' => $request->json('section_id'),
             'slug' => str_slug($request->json('title')),
-            'body'=>$request->json('body'),
+            'body' => $request->json('body'),
         ]);
+
+        return fractal()
+            ->item($topic)
+            ->includeUser()
+        #    ->includeSection()
+            ->transformWith(new TopicTransformer())
+            ->toArray();
     }
 }
