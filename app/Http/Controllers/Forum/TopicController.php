@@ -8,14 +8,19 @@ use App\Http\Requests\Forum\CreateTopicFormRequest;
 use App\Models\Section;
 use App\Models\Topic;
 use App\Transformers\TopicTransformer;
-use Illuminate\Http\Request;
 
 
 class TopicController extends Controller
 {
-    public function index(Request $request, Section $section)
+    public function index(Requests\Forum\GetTopicsFormRequest $request, Section $section)
     {
-        dd('index');
+        $topics = $section->find($request->get('section_id'))->topics()->latestFirst()->get();
+
+        return fractal()
+            ->collection($topics)
+            ->includeUser()
+            ->transformWith(new TopicTransformer())
+            ->toArray();
     }
 
     public function show(Topic $topic)
@@ -30,17 +35,20 @@ class TopicController extends Controller
 
     public function store(CreateTopicFormRequest $request)
     {
-        $topic = $request->user()->topics()->create([
-            'title' => $request->json('title'),
-            'section_id' => $request->json('section_id'),
-            'slug' => str_slug($request->json('title')),
-            'body' => $request->json('body'),
-        ]);
+
+       // for ($i = 0; $i <= 50; $i++) {
+            $topic = $request->user()->topics()->create([
+                'title' => $request->json('title'),
+                'section_id' => $request->json('section_id'),
+                'slug' => str_slug($request->json('title')),
+                'body' => $request->json('body'),
+            ]);
+        //};
 
         return fractal()
             ->item($topic)
             ->includeUser()
-        #    ->includeSection()
+            #    ->includeSection()
             ->transformWith(new TopicTransformer())
             ->toArray();
     }
