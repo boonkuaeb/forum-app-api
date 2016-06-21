@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: boonkuae_boo
- * Date: 6/20/16
- * Time: 18:10
- */
 
 namespace App\Transformers;
 
@@ -16,7 +10,9 @@ class TopicTransformer extends TransformerAbstract
     protected $availableIncludes = [
         'user',
         'section',
+        'posts',
     ];
+
     public function transform(Topic $topic)
     {
         return [
@@ -24,17 +20,22 @@ class TopicTransformer extends TransformerAbstract
             'title' => $topic->title,
             'slug' => $topic->slug,
             'body' => $topic->body,
-            'diffForHumans'=>$topic->created_at->diffForHumans()
+            'diffForHumans' => $topic->created_at->diffForHumans(),
         ];
     }
 
     public function includeUser(Topic $topic)
     {
-        return $this->item($topic->user, new UserTransformer());
+        return $this->item($topic->user, new UserTransformer);
     }
 
     public function includeSection(Topic $topic)
     {
-        return $this->item($topic->section, new SectionTransformer());
+        return $this->item($topic->section, new SectionTransformer);
+    }
+
+    public function includePosts(Topic $topic)
+    {
+        return $this->collection($topic->posts, new PostTransformer);
     }
 }
