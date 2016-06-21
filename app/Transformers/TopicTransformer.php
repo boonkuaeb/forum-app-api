@@ -15,7 +15,7 @@ class TopicTransformer extends TransformerAbstract
 {
     protected $availableIncludes = [
         'user',
-        'section'
+        'section',
     ];
     public function transform(Topic $topic)
     {

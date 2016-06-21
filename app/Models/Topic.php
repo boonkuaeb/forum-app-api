@@ -33,4 +33,9 @@ class Topic extends Model
     {
         return $this->belongsTo(Section::class, 'section_id', 'id');
     }
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
 }
